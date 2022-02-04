@@ -6,7 +6,7 @@ home: https://www.envoyproxy.io/
 sources:
   - https://github.com/envoyproxy/envoy
 type: application
-version: 0.1.1
+version: 0.1.2
 appVersion: "1.21.0"
 maintainers:
   - name: Felipe Nobrega Dias
