@@ -6,11 +6,11 @@ Helm chart to deploy a Envoy Proxy Edge
 
 ```bash
 
-helm repo add envoy-edge https://ativy-digital.github.io/helm-proxy-envoy-edge/
+helm repo add envoy-edge https://ativy-digital.github.io/helm-envoy-edge/
 
 helm repo update
 
-helm install RELEASE fluentd-loki/fluentd-loki -n envoy
+helm install my-envoy-edge envoy-edge/envoy-edge --version 0.1.1
 
 ```
 
