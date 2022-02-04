@@ -1,36 +1,101 @@
-# Envoy Helm Chart
+# Default values for envoy-edge.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
 
-Helm chart to deploy a Envoy Proxy Edge
+replicaCount: 1
 
-## Install Helm repo
+image:
+  repository: envoyproxy/envoy
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v1.21.0"
 
-```bash
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
 
-helm repo add envoy-edge https://ativy-digital.github.io/helm-proxy-envoy-edge/
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
 
-helm repo update
+  ServiceAccountToken: true
 
-helm install RELEASE fluentd-loki/fluentd-loki -n envoy
+podAnnotations: {}
 
-```
+podSecurityContext: {}
+  # fsGroup: 2000
 
-## Envoy configuration
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
 
-Oficial reference: <https://www.envoyproxy.io/docs/envoy/v1.21.0/configuration/best_practices/edge.html?highlight=lb_endpoints>
+service:
+  type: ClusterIP
+  annotations: {}
+  port: 10000
+  targetPort: 10000
+  name: grpc-01
+  ports: []
 
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
-This default helm chart has a sample of proxy LoadBalance GRPC -> HTTP 2/0 REST
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
 
-Just change this fields on sample
+nodeSelector: {}
 
- <<<<<< INSERT_CLUSTER_NAME >>>>>> -> <https://www.envoyproxy.io/docs/envoy/v1.21.0/api-v3/config/cluster/v3/cluster.proto.html?highlight=cluster>
+tolerations: []
 
- <<<<<< URL_DOMAIN_UPSTREAM >>>>>> -> <https://www.envoyproxy.io/docs/envoy/v1.21.0/api-v3/config/core/v3/address.proto#envoy-v3-api-msg-config-core-v3-socketaddress>
+tlsSecret:
+  annotations: {}
+  data: {}
 
-```yaml
+affinity: {}
 
+args:
+  - '-c'
+  - /etc/envoy/envoy.yaml
+  - '-l'
+  - debug
+
+volumeMounts:
+  - name: envoy-config
+    mountPath: /etc/envoy/
+
+volumes:
+  - name: envoy-config
+    configMap:
+      name: envoy-config
+
+rbac:
+  create:
+    enabled: true
+
+envoyConfigs:
   envoy.yaml: |-
-
     overload_manager:
       refresh_interval: 0.25s
       resource_monitors:
@@ -122,9 +187,3 @@ Just change this fields on sample
             sni: <<<<<< URL_DOMAIN_UPSTREAM >>>>>>
             common_tls_context:
               alpn_protocols: ["h2"]
-
-```
-
-## Configuration Examples
-
-<https://www.envoyproxy.io/docs/envoy/v1.21.0/configuration/overview/examples>
