@@ -1,0 +1,16 @@
+{{- if .Values.rbac.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "envoy-edge.fullname" . }}
+  labels:
+    {{- include "envoy-edge.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "envoy-edge.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "envoy-edge.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end -}}
