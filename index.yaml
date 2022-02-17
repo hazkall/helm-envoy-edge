@@ -3,6 +3,23 @@ entries:
   envoy-edge:
   - apiVersion: v2
     appVersion: 1.21.0
+    created: "2022-02-17T00:57:36.018478521Z"
+    description: A Helm chart for Deploy Envoy Proxy Edge
+    digest: c1c5f443861016b4368fd4757db4d846bd610f0244c92418b458749637a19867
+    home: https://www.envoyproxy.io/
+    icon: https://www.envoyproxy.io/docs/envoy/v1.21.0/_static/envoy-logo.png
+    maintainers:
+    - email: felipe.dias@ativy.digital
+      name: Felipe Nobrega Dias
+    name: envoy-edge
+    sources:
+    - https://github.com/envoyproxy/envoy
+    type: application
+    urls:
+    - https://github.com/ativy-digital/helm-envoy-edge/releases/download/envoy-edge-0.1.3/envoy-edge-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 1.21.0
     created: "2022-02-04T19:14:06.691121986Z"
     description: A Helm chart for Deploy Envoy Proxy Edge
     digest: 69868b0fa936a41a97913da2593bdfa9b87d4c4d50993f244bb0a020a7456899
